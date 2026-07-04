@@ -125,7 +125,107 @@ Form pre-filled with student details.
 ---
 
 ## Jenkins CI/CD Pipeline
-Webhook configured successfully.
+
+This project uses a **Jenkins Declarative Pipeline** to automate build, test, and deployment of the Flask application.
+
+### Pipeline Flow
+
+GitHub Push
+↓
+Jenkins Webhook Trigger
+↓
+Checkout Source Code
+↓
+Install Dependencies (pip)
+↓
+Run Unit Tests (pytest)
+↓
+Build Docker Container
+↓
+Deploy Flask Application
+↓
+Send Email Notification (Success / Failure)
+
+<img width="1513" height="416" alt="image" src="https://github.com/user-attachments/assets/26568e6e-4192-491b-8b5f-71152b2a4025" />
+
+---
+
+## Jenkins Pipeline Stages
+
+### 1. Checkout
+- Pulls latest code from GitHub repository
+
+### 2. Build
+- Installs all dependencies from `requirements.txt`
+
+### 3. Test
+- Runs unit tests using `pytest`
+- Pipeline fails if any test fails
+
+<img width="701" height="228" alt="image" src="https://github.com/user-attachments/assets/d1d60736-9d6c-4061-9f1f-0c2927dc36aa" />
+
+### 4. Deploy
+- Runs Flask application inside a Docker container
+- Exposes application on port `8000`
+
+### 5. Verify Deployment
+- Runs docker ps command
+- Show container list
+
+<img width="1024" height="99" alt="image" src="https://github.com/user-attachments/assets/11cf58b1-b540-4c59-984e-a0e2f31d45ea" />
+
+### 6. Notification
+- Sends email using Jenkins **Extended Email Notification plugin**
+- Email sent on both:
+  - ✅ Success
+  - ❌ Failure
+    
+<img width="312" height="211" alt="image" src="https://github.com/user-attachments/assets/b088db36-b6f6-4dbd-843e-07998fa489ef" />
+
+
+<img width="543" height="557" alt="image" src="https://github.com/user-attachments/assets/51f1d81a-58e5-439e-8870-96f413878cc0" />
+
+---
+
+## Jenkins Webhook Integration
+
+- GitHub webhook triggers Jenkins automatically on every push to `main` branch
+- No manual build required
+- Jenkins listens at: /github-webhook/
+
+---
+
+## Docker Deployment
+
+The application is deployed using Docker:
+
+- Base Image: `python:3.12`
+- Flask runs inside container
+- Port mapping: `8000:8000`
+
+---
+
+## Environment Variables
+
+The application uses Jenkins credentials securely:
+
+- `MONGO_URI`
+- `SECRET_KEY`
+
+These are injected using Jenkins **Credentials Binding Plugin**.
+
+---
+
+## Key Learnings
+
+- CI/CD automation using Jenkins
+- GitHub webhook integration
+- Docker-based deployment
+- Secure credential management in Jenkins
+- Multi-node Jenkins execution handling
+- Automated testing using pytest
+
+---
 
 ## License
 
