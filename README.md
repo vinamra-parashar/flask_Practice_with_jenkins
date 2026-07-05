@@ -1,12 +1,6 @@
-# Student Registration System
+# Student Registration System | CI/CD with Jenkins & GitHub Actions
 
 A simple **Flask** web application to manage student records with **MongoDB** as the backend database. Users can **add, view, update, and delete** student details.
-
----
-
-## Architecture Diagram
-
-<img width="1014" height="677" alt="image" src="https://github.com/user-attachments/assets/aa21bab1-37a5-400c-86c2-00308c6defb9" />
 
 ---
 
@@ -117,8 +111,6 @@ Form to add a new student.
 Form pre-filled with student details.
 - <img width="1905" height="897" alt="image" src="https://github.com/user-attachments/assets/04febf01-879f-431f-ab07-abcfb993acf1" />
 
-
-
 ---
 
 ## Notes
@@ -130,27 +122,51 @@ Form pre-filled with student details.
 
 ---
 
+# CI/CD Pipelines
+
+```text
+                    Developer
+                        │
+                 Push Source Code
+                        │
+                GitHub Repository
+                        │
+        ┌───────────────┴───────────────┐
+        │                               │
+        ▼                               ▼
+   Jenkins Pipeline             GitHub Actions
+        │                               │
+   Checkout Code                 Checkout Code
+        │                               │
+ Install Dependencies      Setup Python + Install Dependencies
+        │                               │
+     Run Tests                    Run Tests (pytest)
+        │                               │
+   Build Docker Image          Build Docker Image
+        │                               │
+ Deploy Flask Container     Deploy to Staging (staging branch)
+        │                               │
+        └───────────────┬───────────────┘
+                        │
+               Production Deployment
+                  (Git Tag Release)
+                        │
+                        ▼
+                  Flask Application
+                        │
+                        ▼
+                  MongoDB Atlas
+```                  
+
 ## Jenkins CI/CD Pipeline
 
 This project uses a **Jenkins Declarative Pipeline** to automate build, test, and deployment of the Flask application.
 
-### Pipeline Flow
+### Architecture Diagram
 
-GitHub Push
-↓
-Jenkins Webhook Trigger
-↓
-Checkout Source Code
-↓
-Install Dependencies (pip)
-↓
-Run Unit Tests (pytest)
-↓
-Build Docker Container
-↓
-Deploy Flask Application
-↓
-Send Email Notification (Success / Failure)
+<img width="1014" height="677" alt="image" src="https://github.com/user-attachments/assets/aa21bab1-37a5-400c-86c2-00308c6defb9" />
+
+### Pipeline Flow
 
 <img width="1513" height="416" alt="image" src="https://github.com/user-attachments/assets/26568e6e-4192-491b-8b5f-71152b2a4025" />
 
@@ -224,6 +240,66 @@ These are injected using Jenkins **Credentials Binding Plugin**.
 
 ---
 
+## GitHub Actions CI/CD Pipeline
+
+This project also uses **GitHub Actions** to automate the Continuous Integration and Continuous Deployment (CI/CD) process for the Flask application.
+
+### Workflow Architecture
+
+```text
+                 GitHub Repository
+                        │
+        ┌───────────────┼────────────────┐
+        │               │                │
+        ▼               ▼                ▼
+ Push to main    Push to staging    Push Tag (v1.0.0)
+        │               │                │
+        ▼               ▼                ▼
+  Install Deps    Install Deps     Install Deps
+        ▼               ▼                ▼
+    Run Tests      Run Tests       Run Tests
+        ▼               ▼                ▼
+ Build Docker    Build Docker    Build Docker
+        │               │                │
+        │        Deploy to Staging       │
+        │               │                │
+        └───────────────┼────────────────┘
+                        ▼
+             Deploy to Production
+```
+
+### GitHub Secrets
+
+Sensitive information is securely stored using **GitHub Repository Secrets**.
+
+The following secrets are configured:
+
+<img width="2596" height="506" alt="image" src="https://github.com/user-attachments/assets/ad16bbf3-6231-473e-83f3-a75fe6f4a4f5" />
+
+These secrets are injected into the workflow during execution and are never stored in the source code.
+
+### GitHub Actions Pipeline
+
+<img width="3382" height="1734" alt="image" src="https://github.com/user-attachments/assets/124ef121-acb8-4934-a148-ebf99cf2bf63" />
+
+---
+
+## Deployment Strategy
+
+### Staging Deployment
+
+- Triggered automatically on every push to the **staging** branch.
+- Builds the Docker image.
+- Starts the application container for deployment verification.
+
+### Production Deployment
+
+- Triggered automatically when a Git tag beginning with **v** (for example `v1.0.0`) is pushed.
+- Builds the Docker image.
+- Deploys the application as the production release.
+
+---
+
 ## Key Learnings
 
 - CI/CD automation using Jenkins
@@ -232,6 +308,15 @@ These are injected using Jenkins **Credentials Binding Plugin**.
 - Secure credential management in Jenkins
 - Multi-node Jenkins execution handling
 - Automated testing using pytest
+
+- GitHub Actions CI/CD
+- Automated Python dependency installation
+- Automated testing using pytest
+- Docker image creation
+- Branch-based deployment strategy
+- Tag-based production deployment
+- Secure secret management using GitHub Secrets
+- Continuous Integration and Continuous Deployment (CI/CD)
 
 ---
 
