@@ -30,3 +30,7 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           pytest test_app.py -v
+
+      - name: Build Docker Image
+        run: |
+          docker build -t vinamra-flask-app .
