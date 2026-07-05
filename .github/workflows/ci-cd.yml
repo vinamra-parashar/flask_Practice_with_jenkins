@@ -34,3 +34,21 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t vinamra-flask-app .
+
+      - name: Deploy to Staging
+        if: github.ref == 'refs/heads/staging'
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: |
+          docker run -d \
+            --name flask-staging \
+            -p 8000:8000 \
+            -e MONGO_URI="$MONGO_URI" \
+            -e SECRET_KEY="$SECRET_KEY" \
+            vinamra-flask-app
+
+          docker ps
+
+          docker stop flask-staging
+          docker rm flask-staging
