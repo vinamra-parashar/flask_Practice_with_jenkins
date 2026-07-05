@@ -4,6 +4,12 @@ A simple **Flask** web application to manage student records with **MongoDB** as
 
 ---
 
+## Architecture Diagram
+
+<img width="1014" height="677" alt="image" src="https://github.com/user-attachments/assets/aa21bab1-37a5-400c-86c2-00308c6defb9" />
+
+---
+
 ## Features
 
 * List all students on the home page
@@ -176,12 +182,14 @@ Send Email Notification (Success / Failure)
 
 ### 6. Notification
 - Sends email using Jenkins **Extended Email Notification plugin**
+
+<img width="312" height="211" alt="image" src="https://github.com/user-attachments/assets/b088db36-b6f6-4dbd-843e-07998fa489ef" />
+
 - Email sent on both:
   - ✅ Success
   - ❌ Failure
     
-<img width="312" height="211" alt="image" src="https://github.com/user-attachments/assets/b088db36-b6f6-4dbd-843e-07998fa489ef" />
-
+<img width="503" height="418" alt="image" src="https://github.com/user-attachments/assets/7bb6d7e3-5188-4848-896f-431b93425928" />
 
 <img width="543" height="557" alt="image" src="https://github.com/user-attachments/assets/51f1d81a-58e5-439e-8870-96f413878cc0" />
 
