@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - staging
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -52,3 +54,25 @@ jobs:
 
           docker stop flask-staging
           docker rm flask-staging
+
+      - name: Deploy to Production
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: |
+          echo "🚀 Deploying application to Production..."
+
+          docker run -d \
+            --name flask-production \
+            -p 8000:8000 \
+            -e MONGO_URI="$MONGO_URI" \
+            -e SECRET_KEY="$SECRET_KEY" \
+            vinamra-flask-app
+
+          docker ps
+
+          docker stop flask-production
+          docker rm flask-production
+
+          echo "✅ Production deployment completed."
